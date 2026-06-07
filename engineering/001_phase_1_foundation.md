@@ -1,5 +1,74 @@
 # 001 — Fase 1: Fundação Arquitetural do Robô Assistivo Infantil
 
+## Modo de execução em workspace multi-repositório
+
+Este projeto será trabalhado a partir de um diretório raiz de workspace contendo quatro repositórios Git irmãos.
+
+A raiz do workspace não é um repositório de aplicação e não deve receber código-fonte da aplicação.
+
+Estrutura esperada:
+
+```text
+robotic-assist-child-workspace/
+├── AGENT.md
+├── robotic-assist-child-prompts/
+├── robotic-assist-child-server/
+├── robotic-assist-child-mobile/
+└── robotic-assist-child-rpi/
+```
+
+Antes de alterar qualquer arquivo, o agente deve:
+
+1. Identificar qual repositório será alterado.
+2. Entrar no diretório correto.
+3. Ler o `AGENT.md` do workspace.
+4. Ler o `AGENT.md` do repositório alvo.
+5. Confirmar que o repositório está na branch `develop`.
+6. Fazer alterações somente dentro do repositório correto.
+
+O agente não deve criar arquivos de aplicação na raiz do workspace.
+
+Quando uma tarefa envolver múltiplos repositórios, o agente deve executar em blocos separados e reportar alterações agrupadas por repositório.
+
+Formato obrigatório do relatório final:
+
+```text
+robotic-assist-child-prompts
+- created:
+- modified:
+- validation:
+
+robotic-assist-child-server
+- created:
+- modified:
+- validation:
+
+robotic-assist-child-mobile
+- created:
+- modified:
+- validation:
+
+robotic-assist-child-rpi
+- created:
+- modified:
+- validation:
+```
+
+O backend deve carregar prompts a partir do repositório `robotic-assist-child-prompts` via configuração:
+
+```env
+PROMPTS_REPOSITORY_PATH=../robotic-assist-child-prompts
+```
+
+Em Docker Compose, o repositório de prompts deve ser montado como volume somente leitura no container do server:
+
+```yaml
+volumes:
+  - ../robotic-assist-child-prompts:/app/prompts:ro
+```
+
+Os clientes mobile e Raspberry Pi devem apontar para o API Gateway do server, não diretamente para o backend interno, salvo em testes locais explícitos.
+
 ## Estado atual do projeto
 
 O projeto **Robotic Assist Child** já possui quatro repositórios criados no GitHub, todos clonados localmente, abertos no mesmo workspace e com a branch `develop` criada.
